@@ -7,6 +7,6 @@ This repository contains the results of the following assignment:
 
 Within you will find the following files:
 
-1. README.md file, describing the contents of the repository (THIS FILE)
+1. A README.md file, describing the contents of the repository (THIS FILE)
 2. An R markdown file
 3. A knitted PDF containing the R markdown and R script data
