@@ -1,4 +1,4 @@
-### BIO 439 - *Big Data Analysis* - Homework Assignment #3
+#### BIO 439 - "Big Data Analysis" - Homework Assignment #3
 ###### University of Rhode Island - Spring 2018
 
 This repository contains the results of the following assignment:
@@ -10,3 +10,4 @@ Within you will find the following files:
 1. A README.md file, describing the contents of the repository (THIS FILE)
 2. An R markdown file
 3. A knitted PDF containing the R markdown and R script data
+4. Lesson files from lecture, including the R-project (up through the *Visualizing Data* lesson)
