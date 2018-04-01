@@ -1,45 +1,89 @@
 ---
 title: "Trends and Patterns Associated with Survey Data"
-thanks: "Analysis performed on Ernest et al. 2017, whose original files are located at (https://github.com/weecology/portal-teachingdb). 
-author:
-- name: Elliot Vosburgh
-  affiliation: University of Rhode Island
-- name: Nick Barone
-  affiliation: University of Rhode Island
-- Name: Sam Costa
-  affiliation: University of Rhode Island
-abstract: "This document is intended to identify data trends and patterns associated with the dataset of Ernest et. al 2017. All data analysis was performed using the R programming language and some select packages, including R Markdown, knitr, and the Tidyverse library."
-keywords: "data analysis, trends, datacarpentry"
-date: "`r format(Sys.time(), '%Y-%d-%B')`"
-gemoetry: margin=lin
-fontfamily: "Times New Roman", Times, serif
+author: "Elliot Vosburgh, Sam Costa, Nick Barone"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
 fontsize: 11pt
+gemoetry: margin=lin
+keywords: data analysis, trends, datacarpentry
 endnote: no
+fig_caption: yes
+thanks: Analysis performed on Ernest et al. 2017, whose original files are located
+  at (https://github.com/weecology/portal-teachingdb).
+abstract: This document is intended to identify data trends and patterns associated
+  with the dataset of Ernest et. al 2017. All data analysis was performed using the
+  R programming language and some select packages.
 ---
 
-# Summary of the Data
+# Weight: Differences between Species and Sex over Time
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+An analysis of inter- and intra-species weights over time can provide details about how animals respond to environmental changes; although no environmental descriptions were given in the dataset, such as food abundancy, assumptions can be made based on the recorded observations.
 
-# Hindfoot Length and Sex Correlation
+In Figure 1, mean weight for each recorded species is plotted over individual years. Some species show relatively low weight changes, while others display highly varied weights. The authors propose that these animals, NL, DS, and SH, inhabit more specific or more threatened niches than the other survey species.
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. 
+```{r, fig1, warning=FALSE, echo = FALSE, message=FALSE, fig.width = 7, fig.asp = .6, fig.align = "center", fig.pos = 'h', fig.cap = "Interspecific mean weight over time."}
 
-> At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+# Load necessary libraries
+library(tidyverse)
+library(directlabels)
 
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+# Import data from CSV file
+surveys_complete <- read_csv("data_output/surveys_complete.csv")
 
-# Patterns in Weight and Month
+# Store average weights of species_id by year
 
-Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+yearly_weight <- surveys_complete %>%
+  group_by(year, species_id) %>%
+  summarize(avg_weight = mean(weight))
 
-# Trends in Weight by Year
+# Render a weight-comparison plot with sexes combined
 
-Eos aeterno nusquam insolens ex, nam eu zril decore gloriatur. Vel ad error iudico. An sit nullam tempor labores. Vim quod modo ei, ius iisque eruditi honestatis at. Mediocrem aliquando maiestatis pro ea, iriure fabellas splendide id sit. Sit soleat luptatum ea.
+ggplot(data = yearly_weight, aes(x = year, y = avg_weight, color = species_id)) +
+  geom_line(size = 1.5, alpha = 0.5) +
+  geom_dl(aes(label = species_id), method = list(dl.trans(x = x + 0.1), "last.points"), cex = 1.0) +
+  theme_grey(base_family = "") +
+  theme(axis.text.x = element_text(size = 11, angle = 0),
+        axis.text.y = element_text(size = 11, angle = 0),
+        text = element_text(size = 11),
+        legend.position = "none") +
+  labs(x = "Year",
+       y = "Weight")
 
-- Lorem nemore assentior ad qui, in est stet altera omnesque
-- Pro ad timeam feugiat invidunt, ius soleat partem ex
-- Eam te hinc expetendis, vitae feugiat corrumpit mel ei
-- Cu ubique facilisi mea
+```
 
-Ad eum wisi ubique, eos ad ipsum utamur. Usu ea commodo adolescens, dicam mentitum efficiendi ei vix, at est paulo vivendo periculis? Id alia stet moderatius eum, purto comprehensam at his, in sit liber verterem. Id vis lorem facete quaestio, postea voluptatibus an vis, zril commune ei vix. Eu viris laudem meliore eos, cum cu modo iriure.
+The weights for these three species do not seem to be linked, so it may be supposed that they inhabit different niches, affected differently by habitat changes. Huge swings are recorded for SH, with weight dipping to almost 50 units from over 100 units in under 5 years. Similarly, weight for NL starts at over 175 in 1976, but falls to 140 in 1978. The only correlation seems to be that their average weights begin to rise around 1997 - after that, NL begins to gain while SH begins to lose. No data for DS after this rise was available after 1998.
+
+```{r, fig2, warning=FALSE, echo=FALSE, message=FALSE, fig.width = 7, fig.asp = .6, fig.align = "center", fig.pos = 'h', fig.cap = "Intraspecific mean weight over time, separated by sex."}
+
+# Load necessary libraries
+library(tidyverse)
+library(directlabels)
+
+# Import data from CSV file
+surveys_complete <- read_csv("data_output/surveys_complete.csv")
+
+# Store average weights of sexes of species_id by year
+
+yearly_sex_weight <- surveys_complete %>%
+  group_by(year, sex, species_id) %>%
+  summarize(avg_weight = mean(weight))
+
+# Render a weight-comparison plot with sexes split
+
+ggplot(data = yearly_sex_weight, aes(x = year, y = avg_weight, color = species_id)) +
+  geom_line(size = 1.5, alpha = 0.5) +
+  facet_grid(sex ~ .) +
+  geom_dl(aes(label = species_id), method = list(dl.trans(x = x + 0.1), "last.points"), cex = 0.1) +
+  theme_grey(base_family = "") +
+  theme(axis.text.x = element_text(size = 11, angle = 0),
+        axis.text.y = element_text(size = 11, angle = 0),
+        text = element_text(size = 11),
+        legend.position = "none") +
+  labs(x = "Year",
+       y = "Weight")
+
+```
+
+So there are interspecific differences in mean weight over time. What of intraspecific variance? Males and females for many terrestrial species vary greatly in weight, but what does the data say about intraspecies resilience?
+
+In Figure 2, mean weight was separated out by sex. The authors found that the same species which exhibited interspecific variance, NL, DS, and SH, also exhibited major swings in average weight between males and females. In NL, males were more vulnurable to weight changes, and were faster to gain or lose weight than females. The same can be said for DS and SH. Whether this vulnurability is physiological or behavioral, that is, males willingly forgoing food and giving it to females, is conjecture without further information.
