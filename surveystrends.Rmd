@@ -1,6 +1,6 @@
 ---
 title: "Trends and Patterns Associated with Survey Data"
-author: \centering{Eliot Vosburgh\textsuperscript{1}, Samuel Costa\textsuperscript{1}, Nick Barone\textsuperscript{2} \ \vspace{5 mm} \textsuperscript{1} Department of Biology, University of Rhode Island \ \textsuperscript{2} Department of Kinesiology, University of Rhode Island}
+author: \centering{Elliot Vosburgh\textsuperscript{1}, Samuel Costa\textsuperscript{1}, Nick Barone\textsuperscript{2} \ \vspace{5 mm} \textsuperscript{1} Department of Biology, University of Rhode Island \ \textsuperscript{2} Department of Kinesiology, University of Rhode Island}
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 fontsize: 11pt
